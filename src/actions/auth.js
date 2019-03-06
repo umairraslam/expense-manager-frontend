@@ -10,7 +10,8 @@ function requestlogin() {
         isProcessed: false,
         token: '',
         user: {},
-        message: ''
+        message: '',
+        isAuthenticated: false
     };
 }
 
@@ -21,7 +22,8 @@ function loginSuccess(token, user, message) {
         isProcessed: true,
         token: token,
         user: user,
-        message: message
+        message: message,
+        isAuthenticated: true
     };
 }
 
@@ -32,10 +34,24 @@ function loginFailure(message) {
         isProcessed: true,
         token: '',
         user: {},
-        message: message
+        message: message,
+        isAuthenticated: false
     };
 }
 
+function logout() {
+    return {
+        type: LOGIN,
+        isAuthenticated: false,
+        user: {}
+    }
+}
+
+export function logoutUser() {
+    return (dispatch) => {
+        dispatch(logout());
+    }
+}
 
 export function loginUser(creds) {
     return (dispatch) => {
@@ -43,25 +59,23 @@ export function loginUser(creds) {
         authService.login(creds.email, creds.password).then((response) => {
             if (response.ok) {
                 response.json().then((json) => {
-                    localStorage.setItem('token', json.token);
-                    jwt.verify(json.token, process.env.REACT_APP_JWT_SECRET, function (err, decoded) {
-                        //socketIo.connectToServer(decoded.user.id);
-
-                        //decoded.user.image = json.image;
-                        dispatch(loginSuccess(json.token, decoded, json.message));
-                        dispatch(showSuccess());
+                    console.log(json)
+                    localStorage.setItem('token', json.token.token);
+                    jwt.verify(json.token.token, process.env.REACT_APP_JWT_SECRET, function (err, decoded) {
+                        dispatch(loginSuccess(json.token.token, decoded, json.message));
+                        dispatch(showSuccess(json.message));
                     });
                 });
 
             } else {
                 response.json().then((json) => {
                     dispatch(loginFailure(json.message))
-                    dispatch(showError());
+                    dispatch(showError(json.message));
                 });
             }
         }).catch((error) => {
             dispatch(loginFailure(error.message));
-            dispatch(showError());
+            dispatch(showError(error.message));
         })
     }
 }

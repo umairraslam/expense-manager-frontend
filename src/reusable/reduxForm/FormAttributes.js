@@ -12,7 +12,6 @@ export const renderTextField = ({
   ...custom
 }) => (
     <div>
-      {console.log(value)}
       <TextField
         label={label}
         error={touched && error}

@@ -1,23 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import FormControl from '@material-ui/core/FormControl';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
-import Input from '@material-ui/core/Input';
-import InputLabel from '@material-ui/core/InputLabel';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { withRouter, Redirect } from 'react-router-dom';
 import SignInForm from './SignInForm';
 import { loginUser } from '../actions/auth';
-import CustomizedSnackBars from '../reusable/snackbar/CustomizedSnackbars';
-import {hideSuccess, hideError} from '../actions/snackbar';
 
 const styles = theme => ({
     main: {
@@ -65,29 +54,19 @@ class SignIn extends React.Component {
 
     render() {
         const { classes } = this.props;
-
+        let { from } = { from: { pathname: '/app' } };
+        
+        if (this.props.isAuthenticated) { // eslint-disable-line
+            return (
+              <Redirect to={from} />
+            );
+        } 
         return (
             <main className={classes.main}>
                 <CssBaseline />
                 <Paper className={classes.paper}>
-                    {/* <Avatar className={classes.avatar}>
-                        <LockOutlinedIcon />
-                    </Avatar>
-                    <Typography component="h1" variant="h5">
-                        Sign in
-            </Typography> */}
                     <SignInForm onSubmit={this.doLogin} />
                 </Paper>
-                <CustomizedSnackBars
-                    close={setTimeout(() => { this.props.dispatch(hideSuccess()) }, 3000)}
-                    variant={"success"}
-                    Message={this.props.message}
-                    open={this.props.showSuccessSnackbar} />
-                <CustomizedSnackBars
-                    close={setTimeout(() => { this.props.dispatch(hideError())  }, 3000)}
-                    variant={"error"}
-                    Message={this.props.message}
-                    open={this.props.showErrorSnackbar} />
             </main>
         );
     }
@@ -102,9 +81,7 @@ const mapStateToProps = state => {
         isProcessed: state.auth.isProcessed,
         token: state.auth.token,
         user: state.auth.user,
-        showSuccessSnackbar: state.snackbar.showSuccessSnackbar,
-        showErrorSnackbar: state.snackbar.showErrorSnackbar,
-        message: state.auth.message
+        isAuthenticated: state.auth.isAuthenticated
     };
 }
 

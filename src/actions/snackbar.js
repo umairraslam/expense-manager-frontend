@@ -4,30 +4,34 @@ export const SNACKBARS = {
 }
 
 
-export function showSuccess(){
+export function showSuccess(message){
     return {
         type:SNACKBARS.SHOW_SUCCESS,
-        showSuccessSnackbar:true
+        showSuccessSnackbar:true,
+        message: message
     }
 }
 
 export function hideSuccess(){
     return {
         type:SNACKBARS.SHOW_SUCCESS,
-        showSuccessSnackbar:false
+        showSuccessSnackbar:false,
+        message: ''
     }
 }
 
-export function showError(){
+export function showError(message){
     return {
         type:SNACKBARS.SHOW_ERROR,
-        showErrorSnackbar:true
+        showErrorSnackbar:true,
+        message: message
     }
 }
 
 export function hideError(){
     return {
         type:SNACKBARS.SHOW_ERROR,
-        showErrorSnackbar:false
+        showErrorSnackbar:false,
+        message: ''
     }
 }
