@@ -63,7 +63,7 @@ export function loginUser(creds) {
                     localStorage.setItem('token', json.token.token);
                     jwt.verify(json.token.token, process.env.REACT_APP_JWT_SECRET, function (err, decoded) {
                         dispatch(loginSuccess(json.token.token, decoded, json.message));
-                        dispatch(showSuccess(json.message));
+                        // dispatch(showSuccess(json.message));
                     });
                 });
 

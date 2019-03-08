@@ -2,6 +2,8 @@ export const authService = {
     login
 }
 
+const URL = process.env.REACT_APP_BACKEND_API_URL + "/user";
+
 function login(email, password){
     let config = {
         method:'POST',
@@ -11,5 +13,5 @@ function login(email, password){
             password: password
         })
     };
-    return fetch(process.env.REACT_APP_BACKEND_API_URL+"/login", config);
+    return fetch(URL+"/login", config);
 }

@@ -14,8 +14,6 @@ const PrivateRoute = ({ props ,component, isAuthenticated, ...rest }) => ( // es
   jwt.verify(localStorage.getItem('token')
       , process.env.REACT_APP_JWT_SECRET, function(err, decoded) {
       if(err){
-        console.log(localStorage.getItem('token'))
-        console.log(err)
         props.dispatch(logoutUser());
       }
     }),
@@ -42,7 +40,6 @@ class App extends Component {
         <Switch>
           <Route path="/" exact render={() => <Redirect to="/login" />} />
           <Route path="/login" exact component={SignIn} />
-          {/* <Route path="/app" exact component={Landing} /> */}
           <PrivateRoute props={this.props}  isAuthenticated={this.props.isAuthenticated} path="/app" component={Landing} />
         </Switch>
         <CustomizedSnackBars
